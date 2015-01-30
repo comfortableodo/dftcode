@@ -34,9 +34,9 @@ int main (int argc, char* argv[])
 
 
 //    Debugging.
-//    Print out the linspace p.
-    for (std::vector<double>::const_iterator i = grid_points.begin(); i != grid_points.end(); ++i)
-        std::cout << *i << ' ';
+//    Print out the linspace grid_points.
+    for (std::vector<double>::const_iterator i = grid_points.begin();
+         i != grid_points.end(); ++i) std::cout << *i << ' ';
 
     std::cout << std::endl;
     std::cout << grid_spacing << std::endl;
@@ -51,8 +51,6 @@ int main (int argc, char* argv[])
     std::cout << X << std::endl;
     std::cout << Y << std::endl;
     std::cout << Z << std::endl;
-
-
 
     return 0;
 }
