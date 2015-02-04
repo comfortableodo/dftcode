@@ -6,13 +6,27 @@
 
 #IncludeRegexTransform: 
 
-/home/luebbeno/Dropbox/Programming/C++/hydrogen/hydrogen.cpp
+/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/hydrogen.cpp
 opencv2/core/core.hpp
 -
+eigen3/Eigen/Dense
+-
+eigen3/Eigen/Sparse
+-
+eigen3/unsupported/Eigen/KroneckerProduct
+-
+cstdlib
+-
 iostream
+-
+iomanip
 -
 cmath
 -
 vector
 -
+laplacian.hpp
+/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/laplacian.hpp
+
+/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/laplacian.hpp
 

@@ -4,8 +4,8 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/luebbeno/Dropbox/Programming/C++/hydrogen/hydrogen.cpp" "/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/CMakeFiles/hydrogen.dir/hydrogen.cpp.o"
-  "/home/luebbeno/Dropbox/Programming/C++/hydrogen/main.cpp" "/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/CMakeFiles/hydrogen.dir/main.cpp.o"
+  "/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/hydrogen.cpp" "/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/CMakeFiles/hydrogen.dir/hydrogen.cpp.o"
+  "/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/main.cpp" "/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/CMakeFiles/hydrogen.dir/main.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

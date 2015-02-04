@@ -5,21 +5,21 @@
       <Option title="hydrogen" />
       <Option makefile_is_custom="1" />
       <Option compiler="gcc" />
-      <Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\..\usr\share\;CMake Files\..\..\..\..\..\..\usr\share\OpenCV\;" />
+      <Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\..\..\..\usr\local\share\OpenCV\;" />
       <Build>
       <Target title="all">
-         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default" />
+         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default" />
          <Option type="4" />
          <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 all" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
          </MakeCommands>
       </Target>
       <Target title="hydrogen">
-         <Option output="/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/hydrogen" prefix_auto="0" extension_auto="0" />
-         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default" />
+         <Option output="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/hydrogen" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default" />
          <Option object_output="./" />
          <Option type="1" />
          <Option compiler="gcc" />
@@ -35,15 +35,15 @@
             <Add directory="/usr/local/include" />
          </Compiler>
          <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 hydrogen" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 hydrogen" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
          </MakeCommands>
       </Target>
       <Target title="hydrogen/fast">
-         <Option output="/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/hydrogen" prefix_auto="0" extension_auto="0" />
-         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default" />
+         <Option output="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/hydrogen" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default" />
          <Option object_output="./" />
          <Option type="1" />
          <Option compiler="gcc" />
@@ -59,41 +59,41 @@
             <Add directory="/usr/local/include" />
          </Compiler>
          <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 hydrogen/fast" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 hydrogen/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
          </MakeCommands>
       </Target>
       <Target title="rebuild_cache">
-         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default" />
+         <Option working_dir="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default" />
          <Option type="4" />
          <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 rebuild_cache" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <Build command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/build-hydrogen-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
          </MakeCommands>
       </Target>
       </Build>
-      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/hydrogen/hydrogen.cpp">
+      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/hydrogen.cpp">
       </Unit>
-      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/hydrogen/main.cpp">
+      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/main.cpp">
       </Unit>
-      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/hydrogen/CMakeLists.txt">
+      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/CMakeLists.txt">
           <Option virtualFolder="CMake Files\" />
       </Unit>
-      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/hydrogen/../../../../../../usr/share/OpenCV/OpenCVConfig-version.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\share\OpenCV\" />
+      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/../../../../../../../usr/local/share/OpenCV/OpenCVConfig-version.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\..\..\usr\local\share\OpenCV\" />
       </Unit>
-      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/hydrogen/../../../../../../usr/share/OpenCV/OpenCVConfig.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\share\OpenCV\" />
+      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/../../../../../../../usr/local/share/OpenCV/OpenCVConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\..\..\usr\local\share\OpenCV\" />
       </Unit>
-      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/hydrogen/../../../../../../usr/share/OpenCV/OpenCVModules.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\share\OpenCV\" />
+      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/../../../../../../../usr/local/share/OpenCV/OpenCVModules.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\..\..\usr\local\share\OpenCV\" />
       </Unit>
-      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/hydrogen/../../../../../../usr/share/OpenCV/OpenCVModules-release.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\share\OpenCV\" />
+      <Unit filename="/home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/../../../../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\..\..\usr\local\share\OpenCV\" />
       </Unit>
    </Project>
 </CodeBlocks_project_file>
