@@ -1,6 +1,6 @@
-# include <opencv2/core/core.hpp>
 # include <eigen3/Eigen/Dense>
 # include <eigen3/Eigen/Sparse>
+# include <eigen3/Eigen/StdVector>
 # include <eigen3/unsupported/Eigen/KroneckerProduct>
 # include <cstdlib>
 # include <iostream>
@@ -20,142 +20,144 @@ typedef Eigen::Triplet<double> T;
 // Prototypes for functions.
 //****************************************************************************80
 
-// Copied from eigen.tuxfamily.org to test discrete Laplacian.
-void buildProblem(std::vector<T>& coefficients, Eigen::VectorXd& b, int n);
-void saveAsBitmap(const Eigen::VectorXd& x, int n, const char* filename);
-
-// Equivalent of Matlab linspace function.
-std::vector<double> linspace(double min, double max, int n);
-// Equivalent of Matlab meshgrid function.
-static void meshgrid(const cv::Mat &xgv, const cv::Mat &ygv, const cv::Mat &zgv,
-              cv::Mat_<double> &X, cv::Mat_<double> &Y, cv::Mat_<double> &Z);
-// Helper function that converts cv::Range into std::vector for integer values
-// and calls meshgrid.
-static void meshgridTest(const cv::Range &xgv, const cv::Range &ygv,
-                         const cv::Range &zgv, cv::Mat_<double> &X,
-                         cv::Mat_<double> &Y, cv::Mat_<double> &Z);
-// Convert a 2 dim. matrix to a vector.
-std::vector<double> convertTwoDimMatrixToVector(cv::Mat_<double> matrix);
-
+//// Convert a 2 dim. matrix to a vector.
+//Eigen::VectorXd convertTwoDimMatrixToVector(Eigen::MatrixXd matrix);
 
 int main (int argc, char* argv[])
 {
 
-/*
- * ===========================================================================
- * Variable declarations.
- * ===========================================================================
- */
+//****************************************************************************80
+// Variable declarations.
+//****************************************************************************80
 
+    // Variables defining the grid and the box.
     int number_of_grid_points;
     int number_of_grid_points_cubed;
     double grid_spacing;
     int dimensions;
+    int box_side_length;
 
-    std::vector<double> temp_vec;
-
-    // Declarations of squares of vectors.
-    std::vector<double> x_vec_squared;
-    std::vector<double> y_vec_squared;
-    std::vector<double> z_vec_squared;
-
-    std::vector<double> r; // Distance from the centre.
-    std::vector<double> v_ext; // External potential.
-
+    // Values for calculation.
+    // Should be put into an external file and read by the program at
+    // later stage.
     dimensions = 3;
-    number_of_grid_points = 10;
-    number_of_grid_points_cubed = pow (number_of_grid_points, dimensions);
+    box_side_length = 5;
+    number_of_grid_points = 3;
+    number_of_grid_points_cubed = pow(number_of_grid_points, dimensions);
 
-    // Not being used so far...
-//    std::vector<int> one_vec (number_of_grid_points, 1);
+    // Declarations of vectors.
+    Eigen::VectorXd r(number_of_grid_points_cubed); // Distance from the centre.
 
-/*
- * ===========================================================================
- * External potential.
- * ===========================================================================
- */
+//    Eigen::VectorXd v_ext; // External potential.
+    Eigen::VectorXd v_ext(number_of_grid_points_cubed);
 
-    std::vector<double> grid_points = linspace(-5, 5, number_of_grid_points);
 
+//****************************************************************************80
+// External potential.
+//****************************************************************************80
+
+
+    // Vector containing the grid points.
+    Eigen::VectorXd grid_points;
+    grid_points.setLinSpaced(number_of_grid_points,
+                             (-1)*box_side_length,
+                             box_side_length);
+
+    // Grid spacing:
     grid_spacing = grid_points[2]-grid_points[1];
-
-    cv::Mat_<double> x, y, z;
-
-/*
- * ===========================================================================
- * Debugging.
- * ===========================================================================
-//    Print out the linspace grid_points.
-    for (std::vector<double>::const_iterator i = grid_points.begin();
-         i != grid_points.end(); ++i) std::cout << *i << ' ';
-    Print the grid spacing
-    std::cout << std::endl;
-    std::cout << grid_spacing << std::endl;
-
-//    Meshgrid test
-    cv::Mat_<double> X, Y, Z;
-//    The class cv::range is used to specify a row or a column span in a matrix
-//    ( Mat ) and for many other purposes. Range(a,b) is basically the same as
-//    a:b in  Matlab or a..b in Python.
-//    meshgridTest(cv::Range(1,3), cv::Range(1,3), cv::Range(1,3), X, Y, Z);
-*/
+    // Print out the linspace grid_points.
+//    std::cout << grid_points << std::endl;
 
     //  Call Matlab's meshgrid function equivalent.
-    meshgrid(cv::Mat(grid_points), cv::Mat(grid_points), cv::Mat(grid_points),
-             x, y, z);
+    Eigen::MatrixXd x_matrix;
+    Eigen::MatrixXd y_matrix;
+    Eigen::MatrixXd z_matrix;
 
-    //  Make X, Y, Z one dimensional. Or in other word, convert a matrix to a
-    //  vector.
-    std::vector<double> x_vec = convertTwoDimMatrixToVector(x);
-    std::vector<double> y_vec = convertTwoDimMatrixToVector(y);
-    std::vector<double> z_vec = convertTwoDimMatrixToVector(z);
+    x_matrix = Eigen::RowVectorXd::LinSpaced(number_of_grid_points,
+                                       (-1)*box_side_length,
+                                       box_side_length).
+            replicate(number_of_grid_points,1);
+    y_matrix = Eigen::RowVectorXd::LinSpaced(number_of_grid_points,
+                                       (-1)*box_side_length,
+                                       box_side_length).
+            replicate(number_of_grid_points,1);
+    z_matrix = Eigen::RowVectorXd::LinSpaced(number_of_grid_points,
+                                       (-1)*box_side_length,
+                                       box_side_length).
+            replicate(number_of_grid_points,1);
+
+
+    Eigen::Map<Eigen::VectorXd> x_vec(x_matrix.data(),x_matrix.size());
+    Eigen::Map<Eigen::VectorXd> y_vec(y_matrix.data(),y_matrix.size());
+    Eigen::Map<Eigen::VectorXd> z_vec(z_matrix.data(),z_matrix.size());
+
+    std::cout << "x vector " << std::endl;
+    std::cout << x_vec << std::endl;
+
+    std::cout << "y vector " << std::endl;
+    std::cout << y_vec << std::endl;
+
+    std::cout << "z vector " << std::endl;
+    std::cout << z_vec << std::endl;
+
+    Eigen::VectorXd x_vec_squared;
+    Eigen::VectorXd y_vec_squared;
+    Eigen::VectorXd z_vec_squared;
 
     //  Square the x, y, z vectors.
-    cv::multiply(x_vec, x_vec, x_vec_squared);
-    cv::multiply(y_vec, y_vec, y_vec_squared);
-    cv::multiply(y_vec, z_vec, z_vec_squared);
+    x_vec_squared = x_vec.array().square();
+    y_vec_squared = y_vec.array().square();
+    z_vec_squared = z_vec.array().square();
 
-//    float test = cv::norm(Xvec);
+    std::cout << "x vector squared:" << std::endl;
+    std::cout << x_vec_squared << std::endl;
 
     // Create the external potential.
-    cv::add(x_vec_squared, y_vec_squared, temp_vec);
-    cv::add(z_vec_squared, temp_vec, r);
-    // Square root of r (seems complicated).
-    std::transform(r.begin(), r.end(), r.begin(),
-                    static_cast<double (*)(double)>(std::sqrt));
+    r = x_vec_squared + y_vec_squared + z_vec_squared;
+
+    // sqrt(r)
+    r = r.array().sqrt();
+
     // r=-1/v_ext
-    cv::divide(-1, r, v_ext);
+    v_ext = (-0.1) * r;
 
-    //  And print them for debugging purposes.
-//    for (std::vector<double>::const_iterator i = x_vec_squared.begin();
-//         i != x_vec_squared.end(); ++i) std::cout << *i << ' ';
-//    std::cout << std::endl;
-//    for (std::vector<double>::const_iterator i = y_vec_squared.begin();
-//         i != y_vec_squared.end(); ++i) std::cout << *i << ' ';
-//    std::cout << std::endl;
-//    for (std::vector<double>::const_iterator i = v_ext.begin();
-//         i != v_ext.end(); ++i) std::cout << *i << ' ';
-//    std::cout << std::endl;
+    // Calculate: Vext_sparse=(spdiags(Vext, 0, g3, g3));
+    Eigen::MatrixXd
+            dense_identity_matrix_cubed(
+                number_of_grid_points_cubed,
+                number_of_grid_points_cubed);
 
-/*
- * ===========================================================================
- * Kinetic energy.
- * ===========================================================================
- */
+    std::cout << "Distance from centre:" << std::endl;
+    std::cout << r << std::endl;
+    std::cout << "External potential:" << std::endl;
+    std::cout << v_ext << std::endl;
+    std::cout << "Dense identy matrix cubed:" << std::endl;
+    std::cout << dense_identity_matrix_cubed << std::endl;
 
-    double h = ( grid_points[2] - grid_points[1] );
+
+//    Eigen::
+
+//    dense_identity_matrix_cubed = (v_ext)*(dense_identity_matrix_cubed);
+
+
+//****************************************************************************80
+// Kinetic energy.
+//****************************************************************************80
+
     double *dense_laplacian_array;
 
-    dense_laplacian_array = l1dd ( number_of_grid_points, h );
-    r8mat_print ( number_of_grid_points, number_of_grid_points,
-                  dense_laplacian_array, "  L1DD:" );
+    // Use the discrete Laplacian class.
+    dense_laplacian_array = l1dd ( number_of_grid_points, grid_spacing );
+//    r8mat_print ( number_of_grid_points, number_of_grid_points,
+//                  dense_laplacian_array, "  L1DD:" );
 
-
+    // Map an STL array to an Eigen matrix.
     Eigen::Map<Eigen::MatrixXd>
             dense_laplacian_matrix(dense_laplacian_array,number_of_grid_points,
                number_of_grid_points);
 
-    std::cout << dense_laplacian_matrix << endl;
+//    std::cout << "Dense Laplacian matrix: " << std::endl;
+//    std::cout << dense_laplacian_matrix << std::endl;
 
     Eigen::SparseMatrix<double> sparse_laplacian_matrix =
             dense_laplacian_matrix.sparseView();
@@ -177,87 +179,58 @@ int main (int argc, char* argv[])
     Eigen::SparseMatrix<double> sparse_identity_matrix =
             dense_identity_matrix.sparseView();
 
-    std::cout << sparse_identity_matrix << std::endl;
+//    std::cout << "Sparse identy matrix: " << std::endl;
+//    std::cout << sparse_identity_matrix << std::endl;
 
-    std::cout << sparse_laplacian_matrix << std::endl;
+//    std::cout << "Sparse Laplaciam matrices: " << std::endl;
+//    std::cout << sparse_laplacian_matrix << std::endl;
 
+//    std::cout << "Dense identiy matrix cubed: " << std::endl;
+//    std::cout << dense_identity_matrix_cubed << std::endl;
+
+    // Calculate the kronecker product of the laplacian matrices.
+    // L3=kron(kron(L,I),I)+kron(kron(I,L),I)+kron(kron(I,I),L);
     // There must be a way to do this simpler...
-    Eigen::SparseMatrix<double> sparse_laplacian_matrix_term1 =
-            Eigen::kroneckerProduct(sparse_laplacian_matrix,sparse_identity_matrix);
-    sparse_laplacian_matrix_term1 =
-            kroneckerProduct(sparse_laplacian_matrix_3d,sparse_identity_matrix).eval();
-    Eigen::SparseMatrix<double> sparse_laplacian_matrix_term2 =
-            Eigen::kroneckerProduct(sparse_laplacian_matrix,sparse_identity_matrix);
-    sparse_laplacian_matrix_term1 =
-            kroneckerProduct(sparse_laplacian_matrix_3d,sparse_identity_matrix).eval();
-    Eigen::SparseMatrix<double> sparse_laplacian_matrix_term3 =
-            Eigen::kroneckerProduct(sparse_laplacian_matrix,sparse_identity_matrix);
-    sparse_laplacian_matrix_term1 =
-            kroneckerProduct(sparse_laplacian_matrix_3d,sparse_identity_matrix).eval();
 
+    Eigen::SparseMatrix<double> sparse_laplacian_matrix_term1;
+    Eigen::SparseMatrix<double> sparse_laplacian_matrix_term2;
+    Eigen::SparseMatrix<double> sparse_laplacian_matrix_term3;
+    Eigen::SparseMatrix<double> sparse_laplacian_matrix_sum;
 
+    sparse_laplacian_matrix_term1 =
+            Eigen::kroneckerProduct(sparse_laplacian_matrix,sparse_identity_matrix);
+    sparse_laplacian_matrix_term1 =
+            kroneckerProduct(sparse_laplacian_matrix_term1,
+                             sparse_identity_matrix).eval();
+    sparse_laplacian_matrix_term2 =
+            Eigen::kroneckerProduct(sparse_identity_matrix,
+                                    sparse_laplacian_matrix);
+    sparse_laplacian_matrix_term2 =
+            Eigen::kroneckerProduct(sparse_laplacian_matrix_term2,
+                             sparse_identity_matrix).eval();
+    sparse_laplacian_matrix_term3 =
+            Eigen::kroneckerProduct(sparse_identity_matrix,
+                                    sparse_identity_matrix);
+    sparse_laplacian_matrix_term3 =
+            Eigen::kroneckerProduct(sparse_laplacian_matrix_term3,
+                             sparse_laplacian_matrix).eval();
+
+    sparse_laplacian_matrix_sum =
+            sparse_laplacian_matrix_term1 + sparse_laplacian_matrix_term2 +
+            sparse_laplacian_matrix_term3;
+
+//    std::cout << "Sum of the sparse Laplaciam matrices: " << std::endl;
+//    std::cout << sparse_laplacian_matrix_sum << std::endl;
 
     return 0;
 }
 
-// Equivalent of Matlab linspace function.
-std::vector<double> linspace(double min, double max, int n)
-{
-    std::vector<double> result;
-    // vector iterator
-    int iterator = 0;
+//// Convert a 2 dim. matrix to a vector.
+//Eigen::VectorXd convertTwoDimMatrixToVector(Eigen::MatrixXd matrix)
+//{
+//    double *p = matrix.num  ptr<double>(0); // Pointer to row 0 of X matrix
+//    // Construct a vector using a pointer.
+//    std::vector<double> vector(p, p+matrix.cols*matrix.rows); // Is this dangerous!?
 
-    for (int i = 0; i <= n-2; i++)
-    {
-        double temp = min + i*(max-min)/(floor((double)n) - 1);
-        result.insert(result.begin() + iterator, temp);
-        iterator += 1;
-    }
-
-    //iterator += 1;
-
-    result.insert(result.begin() + iterator, max);
-    return result;
-}
-
-// Equivalent of Matlab meshgrid function.
-static void meshgrid(const cv::Mat &xgv, const cv::Mat &ygv, const cv::Mat &zgv,
-              cv::Mat_<double> &X, cv::Mat_<double> &Y, cv::Mat_<double> &Z)
-{
-    cv::repeat(xgv.reshape(1,1), ygv.total(), 1, X);
-    cv::repeat(ygv.reshape(1,1).t(), 1, xgv.total(), Y);
-    cv::repeat(zgv.reshape(1,1).t(), 1, xgv.total(), Z);
-}
-
-// Helper function that converts cv::Range into std::vector for integer values
-// and calls meshgrid.
-static void meshgridTest(const cv::Range &xgv, const cv::Range &ygv,
-                         const cv::Range &zgv, cv::Mat_<double> &X,
-                         cv::Mat_<double> &Y, cv::Mat_<double> &Z)
-{
-    std::vector<double> t_x, t_y, t_z;
-    for (int i = xgv.start; i <= xgv.end; i++) t_x.push_back(i);
-    for (int i = ygv.start; i <= ygv.end; i++) t_y.push_back(i);
-    for (int i = zgv.start; i <= zgv.end; i++) t_z.push_back(i);
-
-//    Debug
-//    Print out t_x, t_y, t_z
-    for (std::vector<double>::const_iterator i = t_x.begin();
-         i != t_x.end(); ++i) std::cout << *i << ' ';
-
-    std::cout << std::endl;
-
-//    Call the meshgrid function
-    meshgrid(cv::Mat_<double>(t_x), cv::Mat_<double>(t_y),
-             cv::Mat_<double>(t_z), X, Y, Z);
-}
-
-// Convert a 2 dim. matrix to a vector.
-std::vector<double> convertTwoDimMatrixToVector(cv::Mat_<double> matrix)
-{
-    double *p = matrix.ptr<double>(0); // Pointer to row 0 of X matrix
-    // Construct a vector using a pointer.
-    std::vector<double> vector(p, p+matrix.cols*matrix.rows); // Is this dangerous!?
-
-    return vector;
-}
+//    return vector;
+//}

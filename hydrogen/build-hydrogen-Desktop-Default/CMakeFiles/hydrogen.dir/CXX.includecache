@@ -7,11 +7,11 @@
 #IncludeRegexTransform: 
 
 /home/luebbeno/Dropbox/Programming/C++/dftcode/hydrogen/hydrogen.cpp
-opencv2/core/core.hpp
--
 eigen3/Eigen/Dense
 -
 eigen3/Eigen/Sparse
+-
+eigen3/Eigen/StdVector
 -
 eigen3/unsupported/Eigen/KroneckerProduct
 -
