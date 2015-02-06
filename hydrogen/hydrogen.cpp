@@ -86,8 +86,17 @@ int main (int argc, char* argv[])
                                        box_side_length).
             replicate(number_of_grid_points,1);
 
+    std::cout << "x matrix " << std::endl;
+    std::cout << x_matrix << std::endl;
 
-    Eigen::Map<Eigen::VectorXd> x_vec(x_matrix.data(),x_matrix.size());
+    std::cout << "y matrix " << std::endl;
+    std::cout << y_matrix << std::endl;
+
+    std::cout << "z matrix " << std::endl;
+    std::cout << z_matrix << std::endl;
+
+//    Eigen::Map<Eigen::VectorXd> x_vec(x_matrix.data(),x_matrix.size());
+    Eigen::Map<Eigen::VectorXd> x_vec(x_matrix.data(),x_matrix.rows()*x_matrix.cols());
     Eigen::Map<Eigen::VectorXd> y_vec(y_matrix.data(),y_matrix.size());
     Eigen::Map<Eigen::VectorXd> z_vec(z_matrix.data(),z_matrix.size());
 
@@ -131,8 +140,8 @@ int main (int argc, char* argv[])
     std::cout << r << std::endl;
     std::cout << "External potential:" << std::endl;
     std::cout << v_ext << std::endl;
-    std::cout << "Dense identy matrix cubed:" << std::endl;
-    std::cout << dense_identity_matrix_cubed << std::endl;
+//    std::cout << "Dense identy matrix cubed:" << std::endl;
+//    std::cout << dense_identity_matrix_cubed << std::endl;
 
 
 //    Eigen::
