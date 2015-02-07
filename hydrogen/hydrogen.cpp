@@ -46,10 +46,12 @@ int main (int argc, char* argv[])
     number_of_grid_points_cubed = pow(number_of_grid_points, dimensions);
 
     // Declarations of vectors.
-    Eigen::VectorXd r(number_of_grid_points_cubed); // Distance from the centre.
+    Eigen::ArrayXd r(number_of_grid_points_cubed); // Distance from the centre.
+
+    Eigen::ArrayXd x2y2(number_of_grid_points*number_of_grid_points);
 
 //    Eigen::VectorXd v_ext; // External potential.
-    Eigen::VectorXd v_ext(number_of_grid_points_cubed);
+    Eigen::ArrayXd v_ext(number_of_grid_points_cubed);
 
 
 //****************************************************************************80
@@ -58,7 +60,7 @@ int main (int argc, char* argv[])
 
 
     // Vector containing the grid points.
-    Eigen::VectorXd grid_points;
+    Eigen::ArrayXd grid_points(number_of_grid_points);
     grid_points.setLinSpaced(number_of_grid_points,
                              (-1)*box_side_length,
                              box_side_length);
@@ -69,85 +71,65 @@ int main (int argc, char* argv[])
 //    std::cout << grid_points << std::endl;
 
     //  Call Matlab's meshgrid function equivalent.
-    Eigen::MatrixXd x_matrix;
-    Eigen::MatrixXd y_matrix;
-    Eigen::MatrixXd z_matrix;
+    // calculate d
 
-    x_matrix = Eigen::RowVectorXd::LinSpaced(number_of_grid_points,
-                                       (-1)*box_side_length,
-                                       box_side_length).
-            replicate(number_of_grid_points,1);
-    y_matrix = Eigen::RowVectorXd::LinSpaced(number_of_grid_points,
-                                       (-1)*box_side_length,
-                                       box_side_length).
-            replicate(number_of_grid_points,1);
-    z_matrix = Eigen::RowVectorXd::LinSpaced(number_of_grid_points,
-                                       (-1)*box_side_length,
-                                       box_side_length).
-            replicate(number_of_grid_points,1);
+    Eigen::ArrayXXd::Map(x2y2.data(), number_of_grid_points, number_of_grid_points) =
+            grid_points.square().transpose().replicate(number_of_grid_points,1) +
+            grid_points.square().replicate(1,number_of_grid_points);
 
-    std::cout << "x matrix " << std::endl;
-    std::cout << x_matrix << std::endl;
-
-    std::cout << "y matrix " << std::endl;
-    std::cout << y_matrix << std::endl;
-
-    std::cout << "z matrix " << std::endl;
-    std::cout << z_matrix << std::endl;
-
-//    Eigen::Map<Eigen::VectorXd> x_vec(x_matrix.data(),x_matrix.size());
-    Eigen::Map<Eigen::VectorXd> x_vec(x_matrix.data(),x_matrix.rows()*x_matrix.cols());
-    Eigen::Map<Eigen::VectorXd> y_vec(y_matrix.data(),y_matrix.size());
-    Eigen::Map<Eigen::VectorXd> z_vec(z_matrix.data(),z_matrix.size());
-
-    std::cout << "x vector " << std::endl;
-    std::cout << x_vec << std::endl;
-
-    std::cout << "y vector " << std::endl;
-    std::cout << y_vec << std::endl;
-
-    std::cout << "z vector " << std::endl;
-    std::cout << z_vec << std::endl;
-
-    Eigen::VectorXd x_vec_squared;
-    Eigen::VectorXd y_vec_squared;
-    Eigen::VectorXd z_vec_squared;
-
-    //  Square the x, y, z vectors.
-    x_vec_squared = x_vec.array().square();
-    y_vec_squared = y_vec.array().square();
-    z_vec_squared = z_vec.array().square();
-
-    std::cout << "x vector squared:" << std::endl;
-    std::cout << x_vec_squared << std::endl;
-
-    // Create the external potential.
-    r = x_vec_squared + y_vec_squared + z_vec_squared;
+    Eigen::ArrayXXd::Map(r.data(), number_of_grid_points*number_of_grid_points,
+                         number_of_grid_points) =
+            x2y2.replicate(1,number_of_grid_points) +
+            grid_points.square().transpose().replicate(number_of_grid_points*
+                                              number_of_grid_points,1);
 
     // sqrt(r)
     r = r.array().sqrt();
 
+    std::cout << "r: " << std::endl;
+    std::cout << r << std::endl;
+
     // r=-1/v_ext
     v_ext = (-0.1) * r;
+
+//****************************************************************************80
 
     // Calculate: Vext_sparse=(spdiags(Vext, 0, g3, g3));
     Eigen::MatrixXd
             dense_identity_matrix_cubed(
                 number_of_grid_points_cubed,
                 number_of_grid_points_cubed);
+    dense_identity_matrix_cubed.setIdentity(
+                number_of_grid_points_cubed,
+                number_of_grid_points_cubed);
+
+    Eigen::MatrixXd
+            dense_v_ext_matrix_cubed(
+                number_of_grid_points_cubed,
+                number_of_grid_points_cubed);
+
 
     std::cout << "Distance from centre:" << std::endl;
     std::cout << r << std::endl;
     std::cout << "External potential:" << std::endl;
     std::cout << v_ext << std::endl;
-//    std::cout << "Dense identy matrix cubed:" << std::endl;
-//    std::cout << dense_identity_matrix_cubed << std::endl;
+    std::cout << "External potential transposed:" << std::endl;
+    std::cout << v_ext.transpose() << std::endl;
+    std::cout << "Dense identy matrix cubed:" << std::endl;
+    std::cout << dense_identity_matrix_cubed << std::endl;
 
+    // Should probably make sparse!!
+//    Eigen::SparseMatrix<double> sparse_identity_matrix_cubed =
+//            dense_identity_matrix_cubed.sparseView();
 
-//    Eigen::
+    dense_v_ext_matrix_cubed = dense_identity_matrix_cubed.array().rowwise() *
+            v_ext.transpose();
 
-//    dense_identity_matrix_cubed = (v_ext)*(dense_identity_matrix_cubed);
+    std::cout << "TEST: " << std::endl;
+    std::cout << dense_identity_matrix_cubed.array().rowwise() * v_ext.transpose() << std::endl;
 
+    Eigen::SparseMatrix<double> sparse_v_ext_matrx_cubed =
+                dense_v_ext_matrix_cubed.sparseView();
 
 //****************************************************************************80
 // Kinetic energy.
@@ -228,8 +210,24 @@ int main (int argc, char* argv[])
             sparse_laplacian_matrix_term1 + sparse_laplacian_matrix_term2 +
             sparse_laplacian_matrix_term3;
 
-//    std::cout << "Sum of the sparse Laplaciam matrices: " << std::endl;
-//    std::cout << sparse_laplacian_matrix_sum << std::endl;
+    std::cout << "Sum of the sparse Laplaciam matrices: " << std::endl;
+    std::cout << sparse_laplacian_matrix_sum << std::endl;
+
+//****************************************************************************80
+// Eigenvalues.
+//****************************************************************************80
+
+    std::cout << "sparse_laplacian_matrix_sum.rows()" << std::endl;
+    std::cout << sparse_laplacian_matrix_sum.rows() << std::endl;
+    std::cout << "sparse_laplacian_matrix_sum.cols()" << std::endl;
+    std::cout << sparse_laplacian_matrix_sum.cols() << std::endl;
+    std::cout << "sparse_v_ext_matrx_cubed.rows()" << std::endl;
+    std::cout << sparse_v_ext_matrx_cubed.rows() << std::endl;
+    std::cout << "sparse_v_ext_matrx_cubed.cols()" << std::endl;
+    std::cout << sparse_v_ext_matrx_cubed.cols() << std::endl;
+
+    std::cout << "sparse_v_ext_matrx_cubed.cols()" << std::endl;
+    std::cout << sparse_v_ext_matrx_cubed + sparse_laplacian_matrix_sum << std::endl;
 
     return 0;
 }
