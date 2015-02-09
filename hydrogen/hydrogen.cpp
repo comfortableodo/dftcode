@@ -1,6 +1,7 @@
 # include <eigen3/Eigen/Dense>
 # include <eigen3/Eigen/Sparse>
 # include <eigen3/Eigen/StdVector>
+# include <eigen3/Eigen/Eigenvalues>
 # include <eigen3/unsupported/Eigen/KroneckerProduct>
 # include <cstdlib>
 # include <iostream>
@@ -8,13 +9,53 @@
 # include <cmath>
 # include <vector>
 
-# include "laplacian.hpp"
-
 using namespace std;
+
+# include "laplacian.hpp"
 
 typedef Eigen::SparseMatrix<double> SpMat; // declares a column-major sparse matrix type of double
 typedef Eigen::Triplet<double> T;
 
+//****************************************************************************80
+// Templates
+//****************************************************************************80
+
+/**
+ * @brief powerIteration Compute the dominant eigenvalue and its relative eigenvector of a square matrix
+ * @param A The input matrix
+ * @param eigenVector The eigenvector
+ * @param tolerance Maximum tolerance
+ * @param nIterations Number of iterations
+ * @return The dominant eigenvalue
+ */
+template < typename Derived,  typename OtherDerived>
+typename Derived::Scalar powerIteration(const Eigen::MatrixBase<Derived>& A, Eigen::MatrixBase<OtherDerived>  & eigenVector, typename Derived::Scalar tolerance,  int nIterations)
+{
+    typedef typename Derived::Scalar Scalar;
+
+    OtherDerived approx(A.cols());
+    approx.setRandom(A.cols());
+    int counter = 0;
+    Scalar error=100;
+    while (counter < nIterations && error > tolerance  )
+    {
+        OtherDerived temp = approx;
+        approx = (A*temp).normalized();
+        error = (temp-approx).stableNorm();
+        counter++;
+    }
+    eigenVector = approx;
+
+    Scalar dominantEigenvalue = approx.transpose()*A*approx;
+#ifdef INFO_LOG
+    cerr << "Power Iteration:" << endl;
+    cerr << "\tTotal iterations= " << counter << endl;
+    cerr << "\tError= " << error << endl;
+    cerr << "\tDominant Eigenvalue= " << dominantEigenvalue << endl;
+    cerr << "\tDominant Eigenvector= [" << eigenVector.transpose()<< "]" << endl;
+#endif
+    return dominantEigenvalue;
+}
 
 //****************************************************************************80
 // Prototypes for functions.
@@ -86,8 +127,8 @@ int main (int argc, char* argv[])
     // sqrt(r)
     r = r.array().sqrt();
 
-    std::cout << "r: " << std::endl;
-    std::cout << r << std::endl;
+//    std::cout << "r: " << std::endl;
+//    std::cout << r << std::endl;
 
     // r=-1/v_ext
     v_ext = (-0.1) * r;
@@ -109,14 +150,14 @@ int main (int argc, char* argv[])
                 number_of_grid_points_cubed);
 
 
-    std::cout << "Distance from centre:" << std::endl;
-    std::cout << r << std::endl;
-    std::cout << "External potential:" << std::endl;
-    std::cout << v_ext << std::endl;
-    std::cout << "External potential transposed:" << std::endl;
-    std::cout << v_ext.transpose() << std::endl;
-    std::cout << "Dense identy matrix cubed:" << std::endl;
-    std::cout << dense_identity_matrix_cubed << std::endl;
+//    std::cout << "Distance from centre:" << std::endl;
+//    std::cout << r << std::endl;
+//    std::cout << "External potential:" << std::endl;
+//    std::cout << v_ext << std::endl;
+//    std::cout << "External potential transposed:" << std::endl;
+//    std::cout << v_ext.transpose() << std::endl;
+//    std::cout << "Dense identy matrix cubed:" << std::endl;
+//    std::cout << dense_identity_matrix_cubed << std::endl;
 
     // Should probably make sparse!!
 //    Eigen::SparseMatrix<double> sparse_identity_matrix_cubed =
@@ -125,10 +166,10 @@ int main (int argc, char* argv[])
     dense_v_ext_matrix_cubed = dense_identity_matrix_cubed.array().rowwise() *
             v_ext.transpose();
 
-    std::cout << "TEST: " << std::endl;
-    std::cout << dense_identity_matrix_cubed.array().rowwise() * v_ext.transpose() << std::endl;
+//    std::cout << "TEST: " << std::endl;
+//    std::cout << dense_identity_matrix_cubed.array().rowwise() * v_ext.transpose() << std::endl;
 
-    Eigen::SparseMatrix<double> sparse_v_ext_matrx_cubed =
+    Eigen::SparseMatrix<double> sparse_v_ext_matrix_cubed =
                 dense_v_ext_matrix_cubed.sparseView();
 
 //****************************************************************************80
@@ -210,24 +251,50 @@ int main (int argc, char* argv[])
             sparse_laplacian_matrix_term1 + sparse_laplacian_matrix_term2 +
             sparse_laplacian_matrix_term3;
 
-    std::cout << "Sum of the sparse Laplaciam matrices: " << std::endl;
-    std::cout << sparse_laplacian_matrix_sum << std::endl;
+//    std::cout << "Sum of the sparse Laplaciam matrices: " << std::endl;
+//    std::cout << sparse_laplacian_matrix_sum << std::endl;
 
 //****************************************************************************80
 // Eigenvalues.
 //****************************************************************************80
 
-    std::cout << "sparse_laplacian_matrix_sum.rows()" << std::endl;
-    std::cout << sparse_laplacian_matrix_sum.rows() << std::endl;
-    std::cout << "sparse_laplacian_matrix_sum.cols()" << std::endl;
-    std::cout << sparse_laplacian_matrix_sum.cols() << std::endl;
-    std::cout << "sparse_v_ext_matrx_cubed.rows()" << std::endl;
-    std::cout << sparse_v_ext_matrx_cubed.rows() << std::endl;
-    std::cout << "sparse_v_ext_matrx_cubed.cols()" << std::endl;
-    std::cout << sparse_v_ext_matrx_cubed.cols() << std::endl;
+//    std::cout << "sparse_laplacian_matrix_sum.rows()" << std::endl;
+//    std::cout << sparse_laplacian_matrix_sum.rows() << std::endl;
+//    std::cout << "sparse_laplacian_matrix_sum.cols()" << std::endl;
+//    std::cout << sparse_laplacian_matrix_sum.cols() << std::endl;
+//    std::cout << "sparse_v_ext_matrx_cubed.rows()" << std::endl;
+//    std::cout << sparse_v_ext_matrix_cubed.rows() << std::endl;
+//    std::cout << "sparse_v_ext_matrx_cubed.cols()" << std::endl;
+//    std::cout << sparse_v_ext_matrix_cubed.cols() << std::endl;
 
-    std::cout << "sparse_v_ext_matrx_cubed.cols()" << std::endl;
-    std::cout << sparse_v_ext_matrx_cubed + sparse_laplacian_matrix_sum << std::endl;
+    Eigen::MatrixXd dense_laplacian_matrix_sum =
+            Eigen::MatrixXd(sparse_laplacian_matrix_sum);
+
+    // The addition of sparse matrices produced errors.
+    // It is not yet clear if this is due to a bug in the library or
+    // due to a wrong implementation here.
+//    std::cout << "Kinetic + pot. matrix" << std::endl;
+//    std::cout << (-0.5)*dense_laplacian_matrix_sum + dense_v_ext_matrix_cubed << std::endl;
+
+    Eigen::MatrixXd hamiltonian;
+    hamiltonian = (-0.5)*dense_laplacian_matrix_sum + dense_v_ext_matrix_cubed;
+
+    // Check if there is a way to get eigenvalues of sparse matrices.
+    // See MATLAB's "eigs" in regard to this.
+//    Eigen::SparseMatrix<double> sparse_hamiltonian = hamiltonian.sparseView();
+
+
+    Eigen::EigenSolver<Eigen::MatrixXd> es(hamiltonian);
+    Eigen::VectorXd v = es.eigenvectors();
+
+    Eigen::MatrixXd::Scalar tolerance = 0.1;
+    int iterations = 10;
+
+    Eigen::MatrixXd::Scalar test_energy =
+            powerIteration(Eigen::MatrixBase<Eigen::MatrixXd> hamiltonian, Eigen::MatrixBase<Eigen::VectorXd> v, tolerance, iterations);
+
+    std::cout << "Eigenvalues:" << std::endl;
+    std::cout << test_energy << std::endl;
 
     return 0;
 }
