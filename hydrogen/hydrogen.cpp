@@ -36,7 +36,7 @@ typename Derived::Scalar powerIteration(const Eigen::MatrixBase<Derived>& A, Eig
     OtherDerived approx(A.cols());
     approx.setRandom(A.cols());
     int counter = 0;
-    Scalar error=100;
+    Scalar error = 100;
     while (counter < nIterations && error > tolerance  )
     {
         OtherDerived temp = approx;
@@ -279,19 +279,24 @@ int main (int argc, char* argv[])
     Eigen::MatrixXd hamiltonian;
     hamiltonian = (-0.5)*dense_laplacian_matrix_sum + dense_v_ext_matrix_cubed;
 
+    // Conversion of real Hamiltonian to complex Hamiltonain.
+    // Does not work (yet)!!
+//    Eigen::MatrixXcd complx_hamiltonian;
+//    complx_hamiltonian.real() = hamiltonian;
+
     // Check if there is a way to get eigenvalues of sparse matrices.
     // See MATLAB's "eigs" in regard to this.
 //    Eigen::SparseMatrix<double> sparse_hamiltonian = hamiltonian.sparseView();
 
-
     Eigen::EigenSolver<Eigen::MatrixXd> es(hamiltonian);
-    Eigen::VectorXd v = es.eigenvectors();
+    // This gives all the eigenvectors of the matrix "hamiltonian".
+    Eigen::VectorXcd v = es.eigenvectors().col(0);
 
     Eigen::MatrixXd::Scalar tolerance = 0.1;
     int iterations = 10;
 
-    Eigen::MatrixXd::Scalar test_energy =
-            powerIteration(Eigen::MatrixBase<Eigen::MatrixXd> hamiltonian, Eigen::MatrixBase<Eigen::VectorXd> v, tolerance, iterations);
+    Eigen::MatrixXcd::Scalar test_energy =
+            powerIteration(hamiltonian, v, tolerance, iterations);
 
     std::cout << "Eigenvalues:" << std::endl;
     std::cout << test_energy << std::endl;
