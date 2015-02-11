@@ -20,41 +20,21 @@ typedef Eigen::Triplet<double> T;
 // Templates
 //****************************************************************************80
 
-/**
- * @brief powerIteration Compute the dominant eigenvalue and its relative eigenvector of a square matrix
- * @param A The input matrix
- * @param eigenVector The eigenvector
- * @param tolerance Maximum tolerance
- * @param nIterations Number of iterations
- * @return The dominant eigenvalue
- */
-template < typename Derived,  typename OtherDerived>
-typename Derived::Scalar powerIteration(const Eigen::MatrixBase<Derived>& A, Eigen::MatrixBase<OtherDerived>  & eigenVector, typename Derived::Scalar tolerance,  int nIterations)
-{
-    typedef typename Derived::Scalar Scalar;
-
-    OtherDerived approx(A.cols());
-    approx.setRandom(A.cols());
-    int counter = 0;
-    Scalar error = 100;
-    while (counter < nIterations && error > tolerance  )
-    {
-        OtherDerived temp = approx;
-        approx = (A*temp).normalized();
-        error = (temp-approx).stableNorm();
-        counter++;
-    }
-    eigenVector = approx;
-
-    Scalar dominantEigenvalue = approx.transpose()*A*approx;
-#ifdef INFO_LOG
-    cerr << "Power Iteration:" << endl;
-    cerr << "\tTotal iterations= " << counter << endl;
-    cerr << "\tError= " << error << endl;
-    cerr << "\tDominant Eigenvalue= " << dominantEigenvalue << endl;
-    cerr << "\tDominant Eigenvector= [" << eigenVector.transpose()<< "]" << endl;
-#endif
-    return dominantEigenvalue;
+// Power Method to approximate the largest Eigenvalue
+double computeLargestEigenvalue(const Eigen::MatrixXd& A) {
+   double dd = 1.0;
+   Eigen::VectorXd x = Eigen::VectorXd::Random(A.rows()).transpose();
+   double lambda = 10.0;
+   const double kEpsilon = 1e-1;
+   Eigen::VectorXd y;
+   while (dd > kEpsilon) {
+      y = A*x;
+      dd = abs(x.norm() - lambda);
+      lambda = x.norm();
+      x = y / lambda;
+   }
+   // lambda contains the largest Eigenvalue while x the corresponding Eigenvector
+   return lambda;
 }
 
 //****************************************************************************80
@@ -83,7 +63,7 @@ int main (int argc, char* argv[])
     // later stage.
     dimensions = 3;
     box_side_length = 5;
-    number_of_grid_points = 3;
+    number_of_grid_points = 5;
     number_of_grid_points_cubed = pow(number_of_grid_points, dimensions);
 
     // Declarations of vectors.
@@ -292,14 +272,17 @@ int main (int argc, char* argv[])
     // This gives all the eigenvectors of the matrix "hamiltonian".
     Eigen::VectorXcd v = es.eigenvectors().col(0);
 
-    Eigen::MatrixXd::Scalar tolerance = 0.1;
-    int iterations = 10;
+//    Eigen::MatrixXd::Scalar tolerance = 0.1;
+//    int iterations = 10;
 
-    Eigen::MatrixXcd::Scalar test_energy =
-            powerIteration(hamiltonian, v, tolerance, iterations);
+//    Eigen::MatrixXcd::Scalar test_energy =
+//            powerIteration(hamiltonian, v, tolerance, iterations);
+
+    double largest_eigenvalue;
+    largest_eigenvalue = computeLargestEigenvalue(hamiltonian);
 
     std::cout << "Eigenvalues:" << std::endl;
-    std::cout << test_energy << std::endl;
+    std::cout << largest_eigenvalue << std::endl;
 
     return 0;
 }
